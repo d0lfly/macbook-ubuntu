@@ -27,10 +27,12 @@ macOS 快捷键习惯在 Ubuntu 环境下的配置记录与自动化脚本。
 ```text
 .
 ├── README.md
+├── CHANGELOG.md                # 仓库修订历史
 ├── .gitignore
 ├── docs/
-│   ├── shortcuts-mapping.md     # 系统及应用快捷键映射方案
-│   └── keybindings-analysis.md  # 当前环境分析、风险点与建议
+│   └── shortcuts/
+│       ├── shortcuts-mapping.md     # 系统及应用快捷键映射方案
+│       └── keybindings-analysis.md  # 当前环境分析、风险点与建议
 ├── scripts/
 │   ├── setup-shortcuts.sh       # 应用 macOS 风格快捷键
 │   └── backup-keybindings.sh    # 备份当前 dconf 配置
@@ -40,5 +42,6 @@ macOS 快捷键习惯在 Ubuntu 环境下的配置记录与自动化脚本。
 
 ## 相关文档
 
-- [快捷键映射方案](docs/shortcuts-mapping.md)
-- [环境分析与梳理](docs/keybindings-analysis.md)
+- [快捷键映射方案](docs/shortcuts/shortcuts-mapping.md)
+- [环境分析与梳理](docs/shortcuts/keybindings-analysis.md)
+- [变更记录](CHANGELOG.md)
