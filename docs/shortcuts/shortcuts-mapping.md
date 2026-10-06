@@ -126,3 +126,22 @@ gsettings set org.gnome.desktop.wm.keybindings close "['<Alt>F4']"
     - flameshot full：`flameshot full -c` 或 `flameshot gui` 配合；推荐绑定 `<Super><Shift>3` → `flameshot full`
     - flameshot gui（区域）：`<Super><Shift>4` → `flameshot gui`
     - flameshot config（工具栏）：`<Super><Shift>5` → `flameshot config`
+## Ptyxis (GNOME Console) 常用快捷键（默认）
+
+基于 GNOME Console/Ptyxis 的默认快捷键（与 macOS 对比）：
+
+| macOS Terminal/iTerm | 功能 | Ptyxis 默认 | 建议调整 |
+|---|---|---|---|
+| ⌘+T | 新建标签页 | Ctrl+Shift+T 或可能 Ctrl+Shift+N? | 需核对实际默认 |
+| ⌘+W | 关闭标签页 | Ctrl+Shift+W | 可改为 Super+W（但需注意全局策略） |
+| ⌘+N | 新建窗口 | Ctrl+Shift+N | Super+N（应用内） |
+| ⌘+K | 清屏 | Ctrl+Shift+K 或 Ctrl+L | Ctrl+Shift+K/清屏类似 |
+| ⌘+Shift+C | 复制 | Ctrl+Shift+C | Super+Shift+C（可考虑）或保留 Ctrl+Shift+C |
+| ⌘+Shift+V | 粘贴 | Ctrl+Shift+V | Super+Shift+V |
+| ⌘+F | 查找 | Ctrl+Shift+F | Ctrl+Shift+F（默认合理） |
+| ⌘+Plus/Minus | 放大/缩小 | Ctrl+Plus/Minus | Ctrl+Plus/Minus（合理） |
+| ⌘+0 | 恢复原大小 | Ctrl+0 | Ctrl+0 |
+| ⌘+Tab/⌘+Shift+Tab | 切换标签页 | Ctrl+PageUp/PageDown 或 Ctrl+Tab | 可按需调整 |
+
+注：Ptyxis（GNOME Console）的键绑定可能不全暴露在 dconf/gsettings，部分通过应用菜单或内部配置处理。
+建议优先通过“首选项 > 键盘快捷键”（Preferences > Keyboard Shortcuts）查看和调整。
