@@ -18,6 +18,8 @@
 
 ### 1. 系统快捷键映射（GNOME Settings + dconf/gsettings）
 
+> 锁屏 / 注销 / 截图 / 概览 / 工作区 / 音量亮度等**系统级**快捷键的实测现状与待确认项，见 [system-shortcuts.md](system-shortcuts.md)。
+
 macOS 常用修饰键：Cmd(⌘)=Super, Option(⌥)=Alt, Ctrl=Control。Ubuntu 默认 Super 用于活动概览（Overview/Dash），需要调整以贴近 macOS 使用习惯。
 
 | macOS 快捷键 | 功能 | Ubuntu 映射建议 | 实现方式 |
@@ -39,7 +41,7 @@ macOS 常用修饰键：Cmd(⌘)=Super, Option(⌥)=Alt, Ctrl=Control。Ubuntu �
 | ⌘+Shift+N | 新窗口/文件夹 | Ctrl+Shift+N | 保持 |
 | ⌘+R | 刷新 | Ctrl+R/F5 | 保持 |
 | ⌘+,+ | 偏好设置 | Ctrl+, | 大部分应用 |
-| ⌘+Shift+3/4/5 | 截图 | PrintScreen/Shift+PrintScreen/自定义 | Flameshot/截图工具或 GNOME Screenshot |
+| ⌘+Shift+3/4/5 | 截图 | ⇧⌘3/4/5 → Flameshot（全屏/区域/工具栏） | 已生效，Print 仍为系统截图 |
 | ⌘+L | 地址栏聚焦（浏览器） | Ctrl+L | 保持 |
 | ⌘+←/→ | 行首/行尾 | Ctrl+←/→（词）或 Home/End | 可按习惯调整 |
 | ⌘+Delete | 删除到行首 | Ctrl+Backspace/自定义 | 终端/编辑器差异 |
@@ -108,24 +110,21 @@ gsettings set org.gnome.desktop.wm.keybindings close "['<Alt>F4']"
 
 验证方式：打开 Chrome 多个标签页，按 `Super+W` 应关闭当前标签页而非整个窗口。
 
-## 启动器（⌘+Space）与输入法冲突评估
+## 启动器（⌘+Space）与输入法冲突评估（已生效）
 
-当前系统输入法信息：
-## 启动器（⌘+Space）评估
-- 输入法切换：IBus，切换源默认为 `<Control>space`（gsettings org.gnome.desktop.wm.keybindings switch-input-source）
-- 搜索键（GNOME search）：当前为空 `['']`
-- 结论：将启动器绑定到 `<Super>space`（⌘+Space）与 IBus 的 `<Control>space` 不冲突。实际冲突风险较低。
-- 建议：如需 macOS Spotlight 风格，可将 `<Super>space` 绑定到启动器（如 rofi/ulauncher）或 GNOME search。先评估后应用。
+- 输入法切换：IBus，切换源 `<Control>space`（`org.gnome.desktop.wm.keybindings switch-input-source`）
+- 启动器：`org.gnome.settings-daemon.plugins.media-keys search = ['<Super>space']`
+- 结论：`<Super>space` 与 IBus 的 `<Control>space` 不冲突，已绑定并生效。
 
-## Flameshot 截图（⌘+Shift+3/4/5）
-- 当前系统未安装 flameshot（dpkg/snap 均未找到）
-- macOS 风格：⌘+Shift+3（全屏截图）、⌘+Shift+4（区域截图）、⌘+Shift+5（工具栏） 
-- 建议：安装 flameshot 并绑定快捷键
-  - 安装：`sudo apt install flameshot`
-  - 绑定：在 Settings > Keyboard > Custom Shortcuts 中添加
-    - flameshot full：`flameshot full -c` 或 `flameshot gui` 配合；推荐绑定 `<Super><Shift>3` → `flameshot full`
-    - flameshot gui（区域）：`<Super><Shift>4` → `flameshot gui`
-    - flameshot config（工具栏）：`<Super><Shift>5` → `flameshot config`
+## Flameshot 截图（⌘+Shift+3/4/5）（已生效）
+
+- flameshot 已安装（`/usr/bin/flameshot`）
+- 绑定（GNOME 自定义快捷键）：
+  - `<Super><Shift>3` → `flameshot full -p ~/Pictures`（全屏）
+  - `<Super><Shift>4` → `flameshot gui`（区域）
+  - `<Super><Shift>5` → `flameshot launcher`（工具栏）
+- 冲突处理：`org.gnome.shell.keybindings screenshot` / `show-screenshot-ui` 原本也占用 ⇧⌘3/4，已在
+  `scripts/setup-system-shortcuts.sh` 中释放为 `['<Shift>Print']` / `['<Print>']`，Print 键仍可调出系统截图 UI。
 ## Ptyxis (GNOME Console) 常用快捷键（默认）
 
 基于 GNOME Console/Ptyxis 的默认快捷键（与 macOS 对比）：

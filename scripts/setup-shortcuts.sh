@@ -4,35 +4,30 @@ set -e
 echo "Setting up macOS-like shortcuts..."
 
 # Window management
-# Note: Don't globally bind Super+w to close window so apps (like Chrome)
-# can handle it themselves (close tab). Use Alt+F4 to close window globally.
+# - Don't globally bind Super+w to close: apps (Chrome, Ptyxis) handle it
+#   themselves (close tab). Alt+F4 closes the window.
+# - GNOME 50 has no "hide" key; Super+h maps to minimize as a fallback.
 gsettings set org.gnome.desktop.wm.keybindings close "['<Alt>F4']"
-gsettings set org.gnome.desktop.wm.keybindings minimize "['<Super>m']"
-gsettings set org.gnome.desktop.wm.keybindings maximize "['<Super>Up']"
-gsettings set org.gnome.desktop.wm.keybindings unmaximize "['<Super>Down']"
-gsettings set org.gnome.desktop.wm.keybindings toggle-fullscreen "['<Super>f']"
-gsettings set org.gnome.desktop.wm.keybindings hide "['<Super>h']"
+gsettings set org.gnome.desktop.wm.keybindings minimize "['<Super>m', '<Super>h']"
+gsettings set org.gnome.desktop.wm.keybindings toggle-maximized "['<Super>Up', '<Alt>F10']"
+gsettings set org.gnome.desktop.wm.keybindings toggle-fullscreen "['<Super><Control>f']"
 
 # Application/window switching
-gsettings set org.gnome.desktop.wm.keybindings switch-applications "['<Super>Tab']"
-gsettings set org.gnome.desktop.wm.keybindings switch-applications-backward "['<Shift><Super>Tab']"
-gsettings set org.gnome.desktop.wm.keybindings switch-group "['<Super>grave']"
-gsettings set org.gnome.desktop.wm.keybindings switch-group-backward "['<Shift><Super>grave']"
+gsettings set org.gnome.desktop.wm.keybindings switch-applications "['<Super>Tab', '<Alt>Tab']"
+gsettings set org.gnome.desktop.wm.keybindings switch-applications-backward "['<Shift><Super>Tab', '<Shift><Alt>Tab']"
+gsettings set org.gnome.desktop.wm.keybindings switch-group "['<Super>grave', '<Alt>Above_Tab']"
+gsettings set org.gnome.desktop.wm.keybindings switch-group-backward "['<Shift><Super>grave', '<Shift><Alt>Above_Tab']"
 
-# Workspaces
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left "['<Super>Left']"
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-right "['<Super>Right']"
-gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-left "['<Shift><Super>Left']"
-gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-right "['<Shift><Super>Right']"
+# Workspaces —— 待确认（见 docs/shortcuts/system-shortcuts.md 三·A）
+# A1（当前生效，推荐）：⌘⌥←/→、⌃⌥←/→、⌘PageUp/PageDown，不占用全局 ⌃←/→
+# A2（与 macOS 完全一致，但会吃掉终端/编辑器的 ⌃←/→ 词跳转）：
+# gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left "['<Control>Left', '<Super><Alt>Left']"
+# gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-right "['<Control>Right', '<Super><Alt>Right']"
+
+# 系统级（锁屏/注销/截图冲突/启动器/自动锁屏）见 scripts/setup-system-shortcuts.sh
 
 if command -v flameshot >/dev/null 2>&1; then
-  gsettings set org.gnome.settings-daemon.plugins.media-keys screenshot '[]'
-  gsettings set org.gnome.settings-daemon.plugins.media-keys screenshot-clip '[]'
-  gsettings set org.gnome.settings-daemon.plugins.media-keys area-screenshot '[]'
-  gsettings set org.gnome.settings-daemon.plugins.media-keys area-screenshot-clip '[]'
-  gsettings set org.gnome.settings-daemon.plugins.media-keys window-screenshot '[]'
-  gsettings set org.gnome.settings-daemon.plugins.media-keys window-screenshot-clip '[]'
-  echo "Flameshot detected; consider binding ⌘+Shift+3/4/5 to flameshot in keyboard shortcuts."
+  echo "Flameshot 已安装：⇧⌘3/4/5 已由 setup-system-shortcuts.sh 绑定。"
 else
   echo "Flameshot not found. Install with: sudo apt install flameshot"
 fi

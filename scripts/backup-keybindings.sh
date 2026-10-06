@@ -10,5 +10,7 @@ dconf dump /org/gnome/desktop/wm/keybindings/ > "$BACKUP_DIR/wm-keybindings.dcon
 dconf dump /org/gnome/settings-daemon/plugins/media-keys/ > "$BACKUP_DIR/media-keys.dconf" 2>/dev/null || echo "  - media-keys: skipped"
 dconf dump /org/gnome/mutter/keybindings/ > "$BACKUP_DIR/mutter-keybindings.dconf" 2>/dev/null || echo "  - mutter-keybindings: skipped"
 dconf dump /org/gnome/shell/keybindings/ > "$BACKUP_DIR/shell-keybindings.dconf" 2>/dev/null || echo "  - shell-keybindings: skipped"
+dconf dump /org/gnome/desktop/screensaver/ > "$BACKUP_DIR/screensaver.dconf" 2>/dev/null || echo "  - screensaver: skipped"
+dconf dump /org/gnome/desktop/session/ > "$BACKUP_DIR/session.dconf" 2>/dev/null || echo "  - session: skipped"
 
 echo "Backup completed."

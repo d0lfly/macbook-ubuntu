@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- `docs/shortcuts/system-shortcuts.md`：系统级快捷键实测梳理（锁屏、注销、截图、概览、工作区、音量亮度、输入法），含冲突清单与待确认项
+- `scripts/setup-system-shortcuts.sh`：系统级快捷键配置脚本（锁屏、注销、启动器、截图冲突释放、自动锁屏）
+
+### Fixed
+- 锁屏：恢复 Ubuntu 默认 `⌘L`（此前被覆盖为仅 `⌃⌘Q`，导致按 ⌘L 无反应），现为 `⌘L` + `⌃⌘Q` 双绑定
+- 截图：`⇧⌘3/4` 同时绑定 GNOME Shell 与 Flameshot 导致冲突，释放 Shell 侧（保留 `Print`/`⇧Print`），由 Flameshot 独占
+- `scripts/setup-shortcuts.sh`：删除本环境不存在的 `wm.keybindings hide`、`media-keys screenshot*` 键（`set -e` 下脚本会在中途退出）；改用 `toggle-maximized`；工作区改动改为注释（待确认）
+
+### Changed
+- 更新 `docs/shortcuts/shortcuts-mapping.md` 中过期表述（Flameshot 已安装并绑定、启动器已生效）
+- 更新 `README.md` 目录结构与快速开始
+
 ## [2026-10-06] - 初版快捷键梳理与结构调整
 
 ### Added

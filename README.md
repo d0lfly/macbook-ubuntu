@@ -17,7 +17,8 @@ macOS 快捷键习惯在 Ubuntu 环境下的配置记录与自动化脚本。
 ### 2. 应用 macOS 风格快捷键
 
 ```bash
-./scripts/setup-shortcuts.sh
+./scripts/setup-system-shortcuts.sh   # 系统级：锁屏、注销、截图冲突、启动器、自动锁屏
+./scripts/setup-shortcuts.sh          # 窗口级：最小化、切换、全屏等
 ```
 
 > 建议在执行前先备份，并逐项验证配置是否符合个人习惯。
@@ -32,9 +33,13 @@ macOS 快捷键习惯在 Ubuntu 环境下的配置记录与自动化脚本。
 ├── docs/
 │   └── shortcuts/
 │       ├── shortcuts-mapping.md     # 系统及应用快捷键映射方案
+│       ├── system-shortcuts.md      # 系统级快捷键实测梳理（锁屏/注销/截图/工作区…）
 │       └── keybindings-analysis.md  # 当前环境分析、风险点与建议
 ├── scripts/
-│   ├── setup-shortcuts.sh       # 应用 macOS 风格快捷键
+│   ├── setup-system-shortcuts.sh # 系统级快捷键配置（锁屏、截图冲突等）
+│   ├── setup-shortcuts.sh       # 应用 macOS 风格窗口快捷键
+│   ├── setup-flameshot.sh       # Flameshot 安装与绑定
+│   ├── setup-launcher.sh        # ⌘Space 启动器
 │   └── backup-keybindings.sh    # 备份当前 dconf 配置
 └── examples/
     └── README.md                # 配置示例
@@ -43,5 +48,6 @@ macOS 快捷键习惯在 Ubuntu 环境下的配置记录与自动化脚本。
 ## 相关文档
 
 - [快捷键映射方案](docs/shortcuts/shortcuts-mapping.md)
+- [系统快捷键实测梳理](docs/shortcuts/system-shortcuts.md)
 - [环境分析与梳理](docs/shortcuts/keybindings-analysis.md)
 - [变更记录](CHANGELOG.md)
