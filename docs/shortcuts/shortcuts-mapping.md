@@ -107,3 +107,22 @@ gsettings set org.gnome.desktop.wm.keybindings close "['<Alt>F4']"
 ```
 
 验证方式：打开 Chrome 多个标签页，按 `Super+W` 应关闭当前标签页而非整个窗口。
+
+## 启动器（⌘+Space）与输入法冲突评估
+
+当前系统输入法信息：
+## 启动器（⌘+Space）评估
+- 输入法切换：IBus，切换源默认为 `<Control>space`（gsettings org.gnome.desktop.wm.keybindings switch-input-source）
+- 搜索键（GNOME search）：当前为空 `['']`
+- 结论：将启动器绑定到 `<Super>space`（⌘+Space）与 IBus 的 `<Control>space` 不冲突。实际冲突风险较低。
+- 建议：如需 macOS Spotlight 风格，可将 `<Super>space` 绑定到启动器（如 rofi/ulauncher）或 GNOME search。先评估后应用。
+
+## Flameshot 截图（⌘+Shift+3/4/5）
+- 当前系统未安装 flameshot（dpkg/snap 均未找到）
+- macOS 风格：⌘+Shift+3（全屏截图）、⌘+Shift+4（区域截图）、⌘+Shift+5（工具栏） 
+- 建议：安装 flameshot 并绑定快捷键
+  - 安装：`sudo apt install flameshot`
+  - 绑定：在 Settings > Keyboard > Custom Shortcuts 中添加
+    - flameshot full：`flameshot full -c` 或 `flameshot gui` 配合；推荐绑定 `<Super><Shift>3` → `flameshot full`
+    - flameshot gui（区域）：`<Super><Shift>4` → `flameshot gui`
+    - flameshot config（工具栏）：`<Super><Shift>5` → `flameshot config`
