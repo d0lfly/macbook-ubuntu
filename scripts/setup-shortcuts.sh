@@ -4,7 +4,9 @@ set -e
 echo "Setting up macOS-like shortcuts..."
 
 # Window management
-gsettings set org.gnome.desktop.wm.keybindings close "['<Super>w', '<Alt>F4']"
+# Note: Don't globally bind Super+w to close window so apps (like Chrome)
+# can handle it themselves (close tab). Use Alt+F4 to close window globally.
+gsettings set org.gnome.desktop.wm.keybindings close "['<Alt>F4']"
 gsettings set org.gnome.desktop.wm.keybindings minimize "['<Super>m']"
 gsettings set org.gnome.desktop.wm.keybindings maximize "['<Super>Up']"
 gsettings set org.gnome.desktop.wm.keybindings unmaximize "['<Super>Down']"

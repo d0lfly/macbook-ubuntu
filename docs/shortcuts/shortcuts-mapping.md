@@ -91,3 +91,19 @@ Linux 版微信（Electron）快捷键可通过系统级快捷键覆盖或应用
 - Super 键与 GNOME Overview 冲突：可通过设置或扩展调整
 - 部分应用（Electron）需单独处理
 - 建议先备份当前配置再应用
+
+### 特别说明：Chrome/Chromium 中 ⌘+W（关闭标签页）
+
+**问题**：如果全局绑定 `Super+W` 到“关闭窗口”，Chrome 会将其解释为关闭整个窗口，而不是关闭当前标签页（这与 macOS 的习惯不符）。
+
+**解决方案**：不在系统级全局绑定 `Super+W` 作为“关闭窗口”，让前台应用自行处理该快捷键。推荐做法：
+
+- 系统关闭窗口快捷键改为 `Alt+F4`（通用）
+- Chrome 在获得 `Super+W` 时会按自身键绑定处理，默认行为是“关闭当前标签页”（Close Tab）
+
+当前 `scripts/setup-shortcuts.sh` 已采用此方案：
+```bash
+gsettings set org.gnome.desktop.wm.keybindings close "['<Alt>F4']"
+```
+
+验证方式：打开 Chrome 多个标签页，按 `Super+W` 应关闭当前标签页而非整个窗口。
