@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### 修复锁屏失效：gsd-media-keys 崩溃导致全部媒体键失效（2026-10-11）
+- **根因**：`media-keys custom-keybindings` 列表里的 `custom-keybinding:/emoji-picker:` 是非法 settings path（把 schema 名写进了路径），`gsd-media-keys` 启动即 SEGV，systemd 重启 5 次后放弃 → 自 2026-10-06 10:34 起**所有**媒体键失效：锁屏 `⌘L`/`⌃⌘Q`、注销 `⇧⌘Q`、启动器 `⌘Space`、终端 `⌃⌥T`、Flameshot `⇧⌘3/4/5`、微信 `⇧⌘W/⇧⌘A`、音量/亮度键
+- **修复**：emoji 条目迁到合法路径 `/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/emoji-picker/`，`dconf reset` 删除坏条目，`systemctl --user reset-failed …MediaKeys.service` + `restart …MediaKeys.target`
+- 新增 `scripts/check-media-keys.sh`：校验 custom-keybindings 路径合法性（按 GLib 实际规则：`/` 开头、`/` 结尾、无空段）+ 检查服务存活 + 报告被占用的加速键；`--fix` 自动备份/清理/重启
+- 实测验证（uinput 虚拟键盘注入 + 重启 keyd 接管该设备，走完整 keyd→GNOME 链路）：`⌃⌘Q` → keyd 重发 `Super+Ctrl+Q` → 命中锁屏 ✅；`⌘L` → keyd 翻成 `Ctrl+L`，不锁屏（地址栏，设计如此）
+- 修正 `docs/shortcuts/system-shortcuts.md`：此前「emoji-picker 是正常条目」的结论是误判，并补记本次事故全链路
+- 顺带发现（未改动，待确认）：`⇧⌘3/4/5` 被 mutter 内置「移动窗口到工作区 N」占用，Flameshot 抢不到键；此前「截图冲突已释放」的结论不完整
+
 ### CapsLock 映射为 Control（2026-10-10 续）
 - keyd `[main]` 新增 `capslock = layer(control)`，CapsLock 等同于 Control
 - 用 `layer(control)`（而非直接赋 `leftcontrol`）：它会激活真正的 `control` 层，因此 `CapsLock+⌘+Q`（锁屏）等 `⌃⌘…` 复合层也能用

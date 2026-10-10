@@ -12,7 +12,7 @@
 
 | 功能 | macOS | 本机当前绑定 | 结论 |
 |---|---|---|---|
-| 锁屏 | ⌃⌘Q | `media-keys/screensaver` = `⌃⌘Q` + `⌘L`；keyd 显式重发 `⌃⌘Q` → `Super+Control+Q` | ✅ `⌃⌘Q` 已生效；`⌘L` 等于 `Ctrl+L`（地址栏），不再锁屏 |
+| 锁屏 | ⌃⌘Q | `media-keys/screensaver` = `⌃⌘Q` + `⌘L`；keyd 显式重发 `⌃⌘Q` → `Super+Control+Q` | ✅ `⌃⌘Q` 已实测生效（keyd→GNOME 全链路，见第四节）；`⌘L` 被 keyd 翻成 `Ctrl+L`（地址栏），**不锁屏**（设计如此） |
 | 注销 | ⇧⌘Q | `media-keys/logout` = ⇧⌘Q + ⌃⌥Del | ✅ |
 | 关机 / 重启 / 休眠 | 无默认键盘快捷键 | 无绑定；电源键 = 睡眠（`power-button-action=suspend`） | ✅ 与 macOS 一致，无需绑定 |
 | 空闲自动锁屏 | 约 2 分钟 | `idle-delay=120`(2min) + `lock-enabled=true` + `lock-delay=0` | ✅ 已按 macOS 默认调整 |
@@ -82,7 +82,7 @@
    - `org.gnome.desktop.wm.keybindings hide`（GNOME 50 已移除）
    - `org.gnome.settings-daemon.plugins.media-keys screenshot / area-screenshot …`（已迁移到 `org.gnome.shell.keybindings`）
    在 `set -e` 下脚本会在中途退出；且实测 `toggle-maximized`、`switch-to-workspace-*` 等仍是 GNOME 默认值，说明**该脚本此前从未真正生效**（只有 `close`、`search`、Flameshot 三条是单独 gsettings 落地的）。已修复。
-4. ~~`custom-keybindings` 列表里有空的占位项~~ —— 复核确认：`emoji-picker` 是正常条目（路径为 `custom-keybinding:/emoji-picker:`，`⌘.` → `~/.local/bin/emoji-picker`），此前误判；
+4. **（结论已修正）`emoji-picker` 条目非法，是 2026-10-06 起全部媒体键失效的根因。** 此前把它当成「正常条目」是误判：`custom-keybinding:/emoji-picker:` 把 schema 名写进了路径，不是合法的 settings path。`gsd-media-keys` 启动时对它调用 `g_settings_new_with_path()` 断言失败、拿到 NULL 后继续解引用 → **SEGV**，systemd 重启 5 次后放弃。后果是**所有**由它处理的快捷键失效（锁屏/注销/启动器/终端/Flameshot/微信/音量亮度）。已迁移到合法路径并重启服务，详见第四节；
 5. dconf 残留 `/org/gnome/xxx-test-nonexistent/…`（38 组测试数据，可能来自某次 dconf 命令测试），不影响功能，已清理（含备份）。
 6. `docs/shortcuts/shortcuts-mapping.md` 有过期表述（"Flameshot 未安装"、"搜索键当前为空"），已更新。
 
@@ -96,10 +96,62 @@
 | D. 自动锁屏时长 | 对齐 macOS 约 2 分钟 | ✅ 已改：`idle-delay=120`（原 300） |
 | E. 清理残留 | 删除 `xxx-test-nonexistent` dconf 测试数据（已先备份到 `~/.config/macbook-ubuntu-backup-*/`） | ✅ 已清理 |
 
-## 四、执行方式
+## 四、2026-10-11 事故与修复：gsd-media-keys 崩溃 → 全部媒体键失效
+
+### 症状
+按 `⌃⌘Q` / `⌘L` 锁屏毫无反应；`⌘Space` 启动器、`⇧⌘3/4/5` Flameshot、微信 `⇧⌘W/⇧⌘A`、音量/亮度键一并失效。
+
+### 根因
+`custom-keybindings` 列表里有一条非法路径（把 schema 名写进了路径，且不以 `/` 开头）：
+
+```
+'custom-keybinding:/emoji-picker:'
+```
+
+`gsd-media-keys` 启动时会对列表每一项调用 `g_settings_new_with_path()`：
+
+```
+g_settings_new_with_path: assertion 'path_is_valid (path)' failed
+invalid (NULL) pointer instance
+g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+g_settings_get_value / g_variant_get_string / g_variant_unref: assertion 'value != NULL' failed
+→ SEGV (core dumped)
+```
+
+systemd `Restart=on-failure` 连续重启 5 次后报 “Start request repeated too quickly”，服务进入 failed 且**不再自启**。自 2026-10-06 10:34:38 会话启动起，本机 media-keys 一直是死的。
+
+> 关键点：`gsd-media-keys` 不只是「媒体键」服务 —— **锁屏、注销、启动器、终端、所有自定义快捷键都归它管**。它挂了，等于所有系统级快捷键一起挂。
+
+合法的 settings path 规则（GLib 实测）：以 `/` 开头、以 `/` 结尾、不能有空段（`//`）；字符本身不限（`-`、`_`、`.`、`:`、空格都行）。所以坏例里真正的错是「不以 `/` 开头」。
+
+### 修复
+1. 备份 dconf（`~/.config/macbook-ubuntu-backup-*/media-keys.before.dconf`）。
+2. emoji 条目迁到合法路径，并删掉坏条目：
+   - 合法：`/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/emoji-picker/`
+   - 删除：`dconf reset -f /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom-keybinding:/emoji-picker:/`
+3. 重启服务（它是 D-Bus 激活 + `RefuseManualStart`，不能直接 start/restart，只能重启 target）：
+   ```bash
+   systemctl --user reset-failed org.gnome.SettingsDaemon.MediaKeys.service
+   systemctl --user restart    org.gnome.SettingsDaemon.MediaKeys.target
+   ```
+4. 新增 `scripts/check-media-keys.sh` 做体检（`--fix` 自动备份 + 清理 + 重启），避免同类问题再次静默发生。
+
+### 实测验证（2026-10-11）
+用 uinput 虚拟键盘注入按键、并重启 keyd 让它接管该设备，验证**全链路**（keyd → GNOME）：
+
+| 注入按键 | keyd 实际输出 | 命中 | 结论 |
+|---|---|---|---|
+| `Super+L`（⌘L） | `Ctrl+L` | `<Control>l` 探针 | ⌘L = 地址栏，**不锁屏**（设计如此） |
+| `Ctrl+Super+Q`（⌃⌘Q） | `Super+Ctrl+Q` | `<Super><Control>q` 探针 | 命中 `screensaver` 绑定 → **锁屏可用** |
+
+### 顺带发现（未改动，待确认）：Flameshot ⇧⌘3/4/5 抢不到键
+服务稳定报 `Failed to grab accelerator for keybinding custom:…/flameshot-*/`。实测把绑定换成 `⌘⇧F10` 就能抢到，说明 `⌘⇧1..9` 被 **mutter 内置的「移动窗口到工作区 N」**占着（`org.gnome.desktop.wm.keybindings move-to-workspace-3/4/5` 即使已清空也无效）。因此 ⇧⌘3/4/5 目前给不了 Flameshot —— 此前「截图冲突已释放」的结论不完整，需要另选组合或接受该冲突。
+
+## 五、执行方式
 
 ```bash
 ./scripts/backup-keybindings.sh        # 备份
 ./scripts/setup-system-shortcuts.sh    # 系统级：锁屏/注销/截图冲突/启动器/自动锁屏
+./scripts/check-media-keys.sh          # 体检：锁屏等媒体键是否正常（--fix 自动修复）
 ./scripts/setup-shortcuts.sh           # 窗口级：最小化/切换/全屏等（工作区部分为注释，待确认后放开）
 ```
