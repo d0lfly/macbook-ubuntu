@@ -10,7 +10,14 @@ All notable changes to this project will be documented in this file.
 - 新增 `scripts/check-media-keys.sh`：校验 custom-keybindings 路径合法性（按 GLib 实际规则：`/` 开头、`/` 结尾、无空段）+ 检查服务存活 + 报告被占用的加速键；`--fix` 自动备份/清理/重启
 - 实测验证（uinput 虚拟键盘注入 + 重启 keyd 接管该设备，走完整 keyd→GNOME 链路）：`⌃⌘Q` → keyd 重发 `Super+Ctrl+Q` → 命中锁屏 ✅；`⌘L` → keyd 翻成 `Ctrl+L`，不锁屏（地址栏，设计如此）
 - 修正 `docs/shortcuts/system-shortcuts.md`：此前「emoji-picker 是正常条目」的结论是误判，并补记本次事故全链路
-- 顺带发现（未改动，待确认）：`⇧⌘3/4/5` 被 mutter 内置「移动窗口到工作区 N」占用，Flameshot 抢不到键；此前「截图冲突已释放」的结论不完整
+- 顺带发现：`⇧⌘3/4/5` 抢不到键（当时误记为 mutter 内置键占用）—— 已在下一节定位并修复
+
+### 修复 Flameshot ⇧⌘3/4/5 抢不到键（2026-10-11）
+- **根因**：占键的是 **Ubuntu Dock 扩展**，不是 GNOME Shell 截图键、也不是 `move-to-workspace-*`。它默认把 `<Shift><Super>1..9` 绑给「打开第 N 个应用的（另一个）窗口」：`org.gnome.shell.extensions.dash-to-dock app-shift-hotkey-N`
+- **修复**：`app-shift-hotkey-3/4/5` 置空（保留 `app-hotkey-N`，即 ⌘1..9 切应用）；重写 `scripts/setup-flameshot.sh`，改为真正落地配置（幂等，含释放占键 + 自检）
+- **顺手修隐性 bug**：`gsd-media-keys` 用 `g_spawn_command_line_async` 启动自定义命令、**不走 shell**，原 `flameshot full -p ~/Pictures` 的 `~` 不会展开 → 截图存失败；已改为绝对路径
+- **实测**：虚拟键盘注入 `⌘⇧3/4/5`，经 keyd → gsd-media-keys 全部命中
+- `scripts/check-media-keys.sh`：抢键告警排除 `settings:hibernate` / `settings:playback-repeat` 两个 GNOME 默认噪声项
 
 ### CapsLock 映射为 Control（2026-10-10 续）
 - keyd `[main]` 新增 `capslock = layer(control)`，CapsLock 等同于 Control

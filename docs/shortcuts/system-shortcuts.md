@@ -23,9 +23,9 @@
 
 | 功能 | macOS | 本机当前绑定 | 结论 |
 |---|---|---|---|
-| 全屏截图 | ⇧⌘3 | Flameshot `flameshot full -p ~/Pictures` **与** GNOME Shell `screenshot` 同键 | ⚠️ 冲突，已释放给 Flameshot |
-| 区域截图 | ⇧⌘4 | Flameshot `flameshot gui` **与** GNOME Shell `show-screenshot-ui` 同键 | ⚠️ 冲突，已释放给 Flameshot |
-| 截图工具栏 | ⇧⌘5 | Flameshot `flameshot launcher` | ✅ 无冲突 |
+| 全屏截图 | ⇧⌘3 | Flameshot `flameshot full -p /home/dolfly/Pictures` | ✅ 已生效（需先释放 Ubuntu Dock 的 `app-shift-hotkey-3`，见第四节） |
+| 区域截图 | ⇧⌘4 | Flameshot `flameshot gui` | ✅ 已生效（`app-shift-hotkey-4`） |
+| 截图工具栏 | ⇧⌘5 | Flameshot `flameshot launcher` | ✅ 已生效（`app-shift-hotkey-5`） |
 | 系统截图 UI | — | `Print` / `⇧Print` | ✅ 保留 |
 
 ### 3. 概览 / 启动器 / 窗口
@@ -144,14 +144,25 @@ systemd `Restart=on-failure` 连续重启 5 次后报 “Start request repeated 
 | `Super+L`（⌘L） | `Ctrl+L` | `<Control>l` 探针 | ⌘L = 地址栏，**不锁屏**（设计如此） |
 | `Ctrl+Super+Q`（⌃⌘Q） | `Super+Ctrl+Q` | `<Super><Control>q` 探针 | 命中 `screensaver` 绑定 → **锁屏可用** |
 
-### 顺带发现（未改动，待确认）：Flameshot ⇧⌘3/4/5 抢不到键
-服务稳定报 `Failed to grab accelerator for keybinding custom:…/flameshot-*/`。实测把绑定换成 `⌘⇧F10` 就能抢到，说明 `⌘⇧1..9` 被 **mutter 内置的「移动窗口到工作区 N」**占着（`org.gnome.desktop.wm.keybindings move-to-workspace-3/4/5` 即使已清空也无效）。因此 ⇧⌘3/4/5 目前给不了 Flameshot —— 此前「截图冲突已释放」的结论不完整，需要另选组合或接受该冲突。
+### 附带修复：Flameshot ⇧⌘3/4/5 抢不到键（2026-10-11 已解决）
+服务稳定报 `Failed to grab accelerator for keybinding custom:…/flameshot-*/`。真正占键的是 **Ubuntu Dock 扩展**：它默认把 `<Shift><Super>1..9` 绑给「打开第 N 个应用的（另一个）窗口」—— `org.gnome.shell.extensions.dash-to-dock app-shift-hotkey-N`。
+
+排查过程中的两个岔路（记下来省得再走）：
+- **不是** GNOME Shell 的截图键：那三个早已挪到 `Print` / `⇧Print` / `⌥Print`；
+- **也不是** `org.gnome.desktop.wm.keybindings move-to-workspace-*`：那几项在 dconf 里本来就是空的，且 `⌘⇧F10`、`⌘⇧z` 等能正常抢到、只有 `⌘⇧1..9` 抢不到 —— 这个模式直接指向 Dock。
+
+**修复**：把 `app-shift-hotkey-3/4/5` 置空（只放这三个，保留 `app-hotkey-N` 即 ⌘1..9 切应用），见 `scripts/setup-flameshot.sh`。
+
+顺带修掉一个隐性 bug：`gsd-media-keys` 用 `g_spawn_command_line_async` 启动自定义命令，**不经过 shell**，所以原来的 `flameshot full -p ~/Pictures` 里 `~` 不会展开、截图会存失败；已改为展开后的绝对路径。
+
+**实测**：虚拟键盘注入 `⌘⇧3` / `⌘⇧4` / `⌘⇧5`，经 keyd → gsd-media-keys 全部命中；日志里不再有 flameshot 的抢键失败。
 
 ## 五、执行方式
 
 ```bash
 ./scripts/backup-keybindings.sh        # 备份
 ./scripts/setup-system-shortcuts.sh    # 系统级：锁屏/注销/截图冲突/启动器/自动锁屏
+./scripts/setup-flameshot.sh           # 截图键：⇧⌘3/4/5 独占（含释放 Ubuntu Dock 占键）
 ./scripts/check-media-keys.sh          # 体检：锁屏等媒体键是否正常（--fix 自动修复）
 ./scripts/setup-shortcuts.sh           # 窗口级：最小化/切换/全屏等（工作区部分为注释，待确认后放开）
 ```
