@@ -96,11 +96,14 @@ if [ "$STATE" != "active" ]; then
 fi
 echo "   ✅ 运行中（PID $(pgrep -x gsd-media-keys | head -1)）"
 
-# 抓取失败的告警：说明该加速键被别的组件（GNOME Shell / mutter 内置键）占了
-GRAB="$(journalctl --user -u "$SVC" --no-pager --since '5 min ago' 2>/dev/null | grep -c 'Failed to grab accelerator' || true)"
+# 抓取失败的告警：说明该加速键被别的组件（GNOME Shell / mutter / 扩展）占了
+# hibernate / playback-repeat 是 GNOME 默认项，本机本来就抢不到，噪声太大，排除掉
+GRAB_RAW="$(journalctl --user -u "$SVC" --no-pager --since '5 min ago' 2>/dev/null \
+    | grep 'Failed to grab accelerator' \
+    | grep -v 'settings:hibernate' | grep -v 'settings:playback-repeat' || true)"
+GRAB="$(printf '%s\n' "$GRAB_RAW" | grep -c . || true)"
 if [ "${GRAB:-0}" -gt 0 ]; then
     echo
     echo "   ⚠️  近 5 分钟有 $GRAB 条 'Failed to grab accelerator'（加速键被占用），最近几条："
-    journalctl --user -u "$SVC" --no-pager --since '5 min ago' 2>/dev/null \
-        | grep 'Failed to grab accelerator' | tail -5 | sed 's/^/      /'
+    printf '%s\n' "$GRAB_RAW" | tail -5 | sed 's/^/      /'
 fi
