@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### 修复 keyd 导致的系统键失效（2026-10-10 续）
+- `⌃⌘Q` 锁屏：`[control+meta]` 新增 `q = M-C-q`（此前回落到 `Ctrl+Q`，不触发）
+- `⇧⌘Q` 注销：`[meta+shift]` 新增 `q = M-S-q`
+- `⌃⌘D` 显示桌面：`[control+meta]` 新增 `d = M-C-d`
+- `⇧⌘5` 截图工具栏：`[meta+shift]` 新增 `5 = M-S-5`
+- `⌘\`` / `⇧⌘\`` 切换同应用窗口：`[meta] grave` 改为 `M-grave`，`[meta+shift]` 新增 `grave = M-S-grave`（此前是 `Ctrl+Shift+Tab`，GNOME switch-group 失效）
+- 说明：`⌘L` 保持 `Ctrl+L`（地址栏，与 macOS 一致），锁屏统一用 `⌃⌘Q`
+
 ### 用户确认项（2026-10-10 续）
 - 终端标签：确认 `⌘⇧T` / `⌘⇧W`（Ptyxis 原生 `Ctrl+Shift+T/W`，由 keyd `[meta+shift]` 触发）
 - 工作区切换：改为 `⌘⌃←/→`；keyd `[control+meta]` 新增 `left/right = M-C-left/right` 显式重发为 `Super+Control+←/→`（否则会回落到 `[meta]` 变成 `Ctrl+←`）

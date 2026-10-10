@@ -40,8 +40,16 @@
 
 - `[meta]`：`⌘+字母` → `Ctrl+字母`（GUI 应用）。
 - `[meta+shift]`：`⌘⇧+字母` → `Ctrl+Shift+字母`（终端函数，以及 GUI 的 `Ctrl+Shift` 系）。
-- `[meta+alt]` / `[control+meta]`：需要交还给 GNOME 的组合显式重发（截图 `⇧⌘3/4`、全屏 `⌃⌘F`）。
-- **坑**：复合层未绑定的键会回落到 `[meta]` 并**丢掉 Shift**，所以需要 Shift 的组合必须显式写出（例如 `v = C-S-v`，否则 `⌘⇧V` 会变成 `Ctrl+V`）。
+- `[meta+alt]` / `[control+meta]`：其他组合。
+- **交还给 GNOME 的系统键必须显式重发**（两个坑叠加）：
+  1. `[meta]` 会把 `⌘+字母` 抢成 `Ctrl+字母`；
+  2. 复合层里未绑定的键会**回落到 `[meta]` 并丢掉修饰键**。
+
+  所以凡是要交给 GNOME 的系统键，都得在对应层显式写 `M-` / `M-S-` / `M-C-`：
+  - `[control+meta]`：`q = M-C-q`（锁屏 `⌃⌘Q`）、`d = M-C-d`（显示桌面 `⌃⌘D`）、`f = M-C-f`（全屏 `⌃⌘F`）、`left/right = M-C-left/right`（工作区 `⌘⌃←/→`）
+  - `[meta+shift]`：`q = M-S-q`（注销 `⇧⌘Q`）、`3/4/5 = M-S-3/4/5`（截图 `⇧⌘3/4/5`）、`grave = M-S-grave`（反向切换窗口 `⇧⌘\``）
+  - `[meta]`：`grave = M-grave`（切换同应用窗口 `⌘\``）
+  - 例外：`⌘L` 保持 `Ctrl+L`（浏览器地址栏，与 macOS 一致），所以 GNOME 的 `<Super>l` 锁屏不触发，锁屏统一用 `⌃⌘Q`。
 - **坑**：注释必须独占一行；注释里不要用 `⌘` 等符号。改完用 `sudo systemctl restart keyd`（不要 `reload`）。
 
 ## 四、系统级快捷键（GNOME）
