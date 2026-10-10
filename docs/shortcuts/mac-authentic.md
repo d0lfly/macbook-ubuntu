@@ -23,12 +23,14 @@
 | macOS 习惯 | keyd 实际发送 | Ptyxis 行为 |
 |---|---|---|
 | `⌘⇧C` / `⌘⇧V` | `Ctrl+Shift+C/V` | 复制 / 粘贴 |
-| `⌘⇧T` / `⌘⇧W` | `Ctrl+Shift+T/W` | 新标签 / 关标签 |
+| `⌘W` | `Ctrl+W` | 关标签（macOS 语义） |
+| `⌘⇧T` | `Ctrl+Shift+T` | 新标签 |
 | `⌘⇧N` | `Ctrl+Shift+N` | 新窗口 |
 | `⌘⇧F` | `Ctrl+Shift+F` | 搜索回滚 |
-| `⌘⇧A` | `Ctrl+Shift+A` | 全选 |
 | `⌘⇧O` | `Ctrl+Shift+O` | 标签总览 |
 | `⌃⌘F` | `Ctrl+Super+F` | 全屏 |
+
+> **与微信全局键的冲突**：`⌘⇧W` / `⌘⇧A` 已让给微信（显示/隐藏窗口、截图，见下），所以终端关标签改用 `⌘W`；终端的「全选」只剩物理 `Ctrl+Shift+A`。
 
 > **为什么终端复制不是 `⌘C`**：Ptyxis 没有「有选区复制、无选区中断」（`copy_or_interrupt`）这类动作，而 keyd 在 Wayland 下无法按应用区分，`⌘C` 只能等于 `Ctrl+C`（中断）。所以终端复制统一用 `⌘⇧C`。
 > 物理 `Ctrl+Shift+C/V` 同样可用（终端通用约定）。

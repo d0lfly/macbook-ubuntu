@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### 保留微信全局键（2026-10-10 续）
+- keyd `[meta+shift]` 的 `w` / `a` 改为显式重发（`M-S-w` / `M-S-a`），让 `⌘⇧W` / `⌘⇧A` 交还给 GNOME 的微信全局键（显示/隐藏窗口、截图）
+- 终端关标签随之由 `⌘⇧W` 改为 `⌘W`（Ptyxis close-tab = `Ctrl+W`，macOS 语义）；终端「全选」只剩物理 `Ctrl+Shift+A`
+
 ### 修复 keyd 导致的系统键失效（2026-10-10 续）
 - `⌃⌘Q` 锁屏：`[control+meta]` 新增 `q = M-C-q`（此前回落到 `Ctrl+Q`，不触发）
 - `⇧⌘Q` 注销：`[meta+shift]` 新增 `q = M-S-q`

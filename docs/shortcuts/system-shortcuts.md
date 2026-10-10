@@ -72,7 +72,7 @@
 | Emoji | ⌃⌘Space | 自定义 `⌘.` → `~/.local/bin/emoji-picker` | ✅ |
 | 放大镜 | ⌃⌘± | ⌥⌘= / ⌥⌘- ；屏幕阅读器 ⌥⌘S | ✅ |
 | 终端（kitty） | ⌘T/⌘W/⌘C/⌘V/⌘F | keyd 全局 ⌘→Ctrl + kitty 键位；⌘C 复制、⌘V 粘贴 | ✅ 见 `mac-authentic.md` |
-| 微信全局键 | ⌘⇧W / ⌘⇧A | `⌘⇧W` 显示/隐藏窗口、`⌘⇧A` 截图 | ✅ 与 macOS 微信一致 |
+| 微信全局键 | ⌘⇧W / ⌘⇧A | keyd `[meta+shift]` 显式重发 `⌘⇧W/⌘⇧A` → `Super+Shift+W/A`；终端关标签因此改用 `⌘W` | ✅ 已生效 |
 
 ## 二、发现的问题
 
