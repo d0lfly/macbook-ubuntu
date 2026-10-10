@@ -17,6 +17,15 @@ All notable changes to this project will be documented in this file.
 - 更新 `docs/shortcuts/shortcuts-mapping.md` 中过期表述（Flameshot 已安装并绑定、启动器已生效）
 - 更新 `README.md` 目录结构与快速开始
 
+### 用户确认项执行（2026-10-10）
+- 显示桌面：新增 `⌘F11`（保留 ⌃⌘D / ⌃⌥D）
+- 自动锁屏：空闲 5 分钟 → 2 分钟（对齐 macOS 默认），`idle-delay=120`
+- 工作区切换：确认保持 A1 现状（⌘⌥←/→ 等），不占用全局 ⌃←/→
+- 强制退出：确认用 `⌥F4`（`close`）替代，不另设系统键
+- 清理 dconf 测试残留 `/org/gnome/xxx-test-nonexistent/`（已备份）
+- `docs/shortcuts/system-shortcuts.md`：更正 emoji-picker 判定（实为正常条目，"待确认项" → "确认结果"）
+- `scripts`：同步 `idle-delay=120`、`show-desktop` 增加 `⌘F11`
+
 ## [2026-10-06] - 初版快捷键梳理与结构调整
 
 ### Added

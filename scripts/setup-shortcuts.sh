@@ -18,11 +18,13 @@ gsettings set org.gnome.desktop.wm.keybindings switch-applications-backward "['<
 gsettings set org.gnome.desktop.wm.keybindings switch-group "['<Super>grave', '<Alt>Above_Tab']"
 gsettings set org.gnome.desktop.wm.keybindings switch-group-backward "['<Shift><Super>grave', '<Shift><Alt>Above_Tab']"
 
-# Workspaces —— 待确认（见 docs/shortcuts/system-shortcuts.md 三·A）
-# A1（当前生效，推荐）：⌘⌥←/→、⌃⌥←/→、⌘PageUp/PageDown，不占用全局 ⌃←/→
-# A2（与 macOS 完全一致，但会吃掉终端/编辑器的 ⌃←/→ 词跳转）：
+# Workspaces —— 已确认保持 A1（⌘⌥←/→、⌃⌥←/→、⌘PageUp/PageDown），见 docs/shortcuts/system-shortcuts.md 三·A
+# 不占用全局 ⌃←/→，以免吃掉终端/编辑器的词跳转。A2（与 macOS 完全一致）如需启用再放开：
 # gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left "['<Control>Left', '<Super><Alt>Left']"
 # gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-right "['<Control>Right', '<Super><Alt>Right']"
+
+# Show desktop: 保留 ⌃⌘D，按 macOS 习惯增加 ⌘F11
+gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Primary><Super>d', '<Primary><Alt>d', '<Super>F11']"
 
 # 系统级（锁屏/注销/截图冲突/启动器/自动锁屏）见 scripts/setup-system-shortcuts.sh
 

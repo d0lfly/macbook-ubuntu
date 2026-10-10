@@ -13,9 +13,9 @@
 | 锁屏 | ⌃⌘Q | `media-keys/screensaver` = ⌃⌘Q（**⌘L 已失效**，被覆盖） | ⚠️ 已补回 ⌘L，双绑定 |
 | 注销 | ⇧⌘Q | `media-keys/logout` = ⇧⌘Q + ⌃⌥Del | ✅ |
 | 关机 / 重启 / 休眠 | 无默认键盘快捷键 | 无绑定；电源键 = 睡眠（`power-button-action=suspend`） | ✅ 与 macOS 一致，无需绑定 |
-| 空闲自动锁屏 | 约 2 分钟 | `idle-delay=300`(5min) + `lock-enabled=true` + `lock-delay=0` | ✅ 可调时长 |
+| 空闲自动锁屏 | 约 2 分钟 | `idle-delay=120`(2min) + `lock-enabled=true` + `lock-delay=0` | ✅ 已按 macOS 默认调整 |
 | 休眠恢复后锁屏 | 默认开 | `ubuntu-lock-on-suspend=true` | ✅ |
-| 强制退出 | ⌥⌘Esc | 无对应（GNOME 无 force-quit 键） | ⏸ 待确认（见三·B） |
+| 强制退出 | ⌥⌘Esc | 无对应（GNOME 无 force-quit 键） | ✅ 用 `⌥F4` 替代（见三·B） |
 
 ### 2. 截图
 
@@ -40,15 +40,15 @@
 | 隐藏应用 | ⌘H | GNOME 50 已移除 `hide` 键，⌘H 复用为最小化 | ⚠️ 语义近似（无法真隐藏） |
 | 最大化/还原 | ⌘↑/↓ 绿钮 | `toggle-maximized` = ⌘↑ + ⌥F10 | ✅ |
 | 全屏 | ⌃⌘F | `toggle-fullscreen` = ⌃⌘F | ✅ 恰好与 macOS 一致 |
-| 显示桌面 | ⌘F3 / F11 | `show-desktop` = ⌃⌘D | ⏸ 可选（见三·C） |
+| 显示桌面 | ⌘F3 / F11 | `show-desktop` = ⌃⌘D + ⌃⌥D + `⌘F11` | ✅ 已按 macOS 增加 ⌘F11（见三·C） |
 | 打开系统设置 | ⌘, | `activate-window-menu` = ⌥Space（窗口菜单） | ⚠️ 应用内 ⌘, 见应用篇 |
 
 ### 4. 工作区 / 虚拟桌面
 
 | 功能 | macOS | 本机当前绑定 | 结论 |
 |---|---|---|---|
-| 切换左/右桌面 | ⌃← / ⌃→ | ⌘⌥← / ⌃⌥← / ⌘PageUp；⌘⌥→ / ⌃⌥→ / ⌘PageDown | ⏸ 不一致，待确认（见三·A） |
-| 移动窗口到左/右桌面 | ⌃⌥←/→ 拖动 | ⌘⇧Home/End、⌘⇧⌥←/→、⌃⇧⌥←/→ 等 | ⏸ 同上 |
+| 切换左/右桌面 | ⌃← / ⌃→ | ⌘⌥← / ⌃⌥← / ⌘PageUp；⌘⌥→ / ⌃⌥→ / ⌘PageDown | ✅ 确认保持（避免占用 ⌃←/→ 词跳转，见三·A） |
+| 移动窗口到左/右桌面 | ⌃⌥←/→ 拖动 | ⌘⇧Home/End、⌘⇧⌥←/→、⌃⇧⌥←/→ 等 | ✅ 同上 |
 
 ### 5. 音量 / 亮度 / 媒体
 
@@ -80,27 +80,19 @@
    - `org.gnome.desktop.wm.keybindings hide`（GNOME 50 已移除）
    - `org.gnome.settings-daemon.plugins.media-keys screenshot / area-screenshot …`（已迁移到 `org.gnome.shell.keybindings`）
    在 `set -e` 下脚本会在中途退出；且实测 `toggle-maximized`、`switch-to-workspace-*` 等仍是 GNOME 默认值，说明**该脚本此前从未真正生效**（只有 `close`、`search`、Flameshot 三条是单独 gsettings 落地的）。已修复。
-4. `custom-keybindings` 列表里存在 name/binding/command 全空的 `emoji-picker` 占位项（真正生效的是另一个 `Super+period` 条目）。
-5. dconf 残留 `/org/xxx-test-nonexistent/…` 测试数据（约 30 组），不影响功能。
+4. ~~`custom-keybindings` 列表里有空的占位项~~ —— 复核确认：`emoji-picker` 是正常条目（路径为 `custom-keybinding:/emoji-picker:`，`⌘.` → `~/.local/bin/emoji-picker`），此前误判；
+5. dconf 残留 `/org/gnome/xxx-test-nonexistent/…`（38 组测试数据，可能来自某次 dconf 命令测试），不影响功能，已清理（含备份）。
 6. `docs/shortcuts/shortcuts-mapping.md` 有过期表述（"Flameshot 未安装"、"搜索键当前为空"），已更新。
 
-## 三、待确认项（回复后我立即执行）
+## 三、待确认项 → 确认结果（2026-10-10 已执行）
 
-**A. 工作区（虚拟桌面）切换组合** —— 唯一一处与 macOS 明显不一致的系统键
-
-| 方案 | 绑定 | 优点 | 代价 |
-|---|---|---|---|
-| A1（推荐） | 保持现状 ⌘⌥←/→、⌃⌥←/→ | 不占用任何全局 Ctrl 组合，终端/编辑器 `⌃←` 词跳转不受影响 | 与 macOS ⌃←/→ 不同，需记两套 |
-| A2 | 全局占用 ⌃← / ⌃→ | 与 macOS 完全一致 | 终端、VS Code、Chrome 地址栏等 Linux 应用的 `⌃←/→`（词跳转/行首尾）会被系统吃掉，对开发影响大 |
-| A3 | ⌘← / ⌘→ | 单手好按 | 与 Chrome 前进/后退、终端行首行尾等应用内键位冲突，风险最高 |
-
-**B. 强制退出（⌥⌘Esc）**：GNOME 无对应系统键。可选 ①不绑定，用 `⌥F4` 或系统监视器；②绑定到打开系统监视器。
-
-**C. 显示桌面**：当前 `⌃⌘D`。是否额外加 `⌘F11`（macOS 习惯）？F11 在部分键盘是音量键，需确认。
-
-**D. 自动锁屏时长**：当前空闲 5 分钟即锁屏，是否调整（macOS 默认约 2 分钟/立即）？
-
-**E. 清理**：删除空的 `emoji-picker` 自定义项与 `/org/xxx-test-nonexistent/` 残留。
+| 项 | 建议 | 结果 |
+|---|---|---|
+| A. 工作区切换 | 保持 A1：⌘⌥←/→、⌃⌥←/→、⌘PageUp/PageDown（不占用全局 ⌃←/→） | ✅ 确认，保持现状，未改动 |
+| B. 强制退出 | 用 `⌥F4` 替代（`close=['<Alt>F4']`），不另绑系统监视器 | ✅ 确认，保持现状 |
+| C. 显示桌面 | 增加 macOS 习惯 `⌘F11` | ✅ 已加：`show-desktop = ['⌃⌘D', '⌃⌥D', '⌘F11']` |
+| D. 自动锁屏时长 | 对齐 macOS 约 2 分钟 | ✅ 已改：`idle-delay=120`（原 300） |
+| E. 清理残留 | 删除 `xxx-test-nonexistent` dconf 测试数据（已先备份到 `~/.config/macbook-ubuntu-backup-*/`） | ✅ 已清理 |
 
 ## 四、执行方式
 

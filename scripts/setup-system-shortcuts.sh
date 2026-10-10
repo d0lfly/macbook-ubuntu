@@ -24,10 +24,10 @@ else
   echo "flameshot 未安装，保留 GNOME Shell 截图绑定（⇧⌘3/4）"
 fi
 
-# 自动锁屏：空闲 5 分钟锁屏，锁屏立即生效，休眠恢复需解锁
+# 自动锁屏：空闲 2 分钟锁屏（对齐 macOS 默认），锁屏立即生效，休眠恢复需解锁
 gsettings set org.gnome.desktop.screensaver lock-enabled true
 gsettings set org.gnome.desktop.screensaver lock-delay 0
-gsettings set org.gnome.desktop.session idle-delay 300
+gsettings set org.gnome.desktop.session idle-delay 120
 gsettings set org.gnome.desktop.screensaver ubuntu-lock-on-suspend true
 
 echo "== 当前系统级绑定 =="
