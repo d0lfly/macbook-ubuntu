@@ -18,7 +18,7 @@ macOS 快捷键习惯在 Ubuntu 环境下的配置记录与自动化脚本。
 
 ```bash
 sudo ./scripts/setup-keyd.sh           # 内核层：把 ⌘+X 翻译成 Ctrl+X（GUI 应用统一）
-./scripts/setup-terminal.sh            # 终端 kitty：⌘C 复制 / ⌘V 粘贴，并设为默认终端
+./scripts/setup-terminal.sh            # 终端：保持系统默认 Ptyxis，还原其原生键位（⌘⇧C/V 复制粘贴）
 ./scripts/setup-system-shortcuts.sh    # 系统级：锁屏、注销、截图冲突、启动器、自动锁屏
 ./scripts/setup-shortcuts.sh           # 窗口级：最小化、切换、全屏等
 ```
@@ -34,8 +34,7 @@ sudo ./scripts/setup-keyd.sh           # 内核层：把 ⌘+X 翻译成 Ctrl+X�
 ├── CHANGELOG.md                # 仓库修订历史
 ├── .gitignore
 ├── config/
-│   ├── keyd/default.conf           # keyd 映射（⌘ → Ctrl）
-│   └── kitty/kitty.conf            # 终端 kitty 的 macOS 键位
+│   └── keyd/default.conf           # keyd 映射（⌘ → Ctrl）
 ├── docs/
 │   └── shortcuts/
 │       ├── mac-authentic.md         # 整体架构与最佳方案（keyd + kitty + GNOME）
@@ -44,7 +43,7 @@ sudo ./scripts/setup-keyd.sh           # 内核层：把 ⌘+X 翻译成 Ctrl+X�
 │       └── keybindings-analysis.md  # 当前环境分析、风险点与建议
 ├── scripts/
 │   ├── setup-keyd.sh            # 安装 keyd 配置（需 sudo）
-│   ├── setup-terminal.sh        # 安装 kitty 键位并设为默认终端
+│   ├── setup-terminal.sh        # 保持系统默认终端 Ptyxis 并还原其键位
 │   ├── setup-system-shortcuts.sh # 系统级快捷键配置（锁屏、截图冲突等）
 │   ├── setup-shortcuts.sh       # 应用 macOS 风格窗口快捷键
 │   ├── setup-flameshot.sh       # Flameshot 安装与绑定

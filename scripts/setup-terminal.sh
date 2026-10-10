@@ -1,16 +1,11 @@
 #!/bin/bash
-# 安装 kitty 作为默认终端，并应用 macOS 风格键位（⌘C 复制 / ⌘V 粘贴）
-# 依赖：sudo apt install kitty
+# 保持系统默认终端 Ptyxis，并将其快捷键还原为原生默认（Ctrl+Shift+…）。
+# 配合 keyd 的 [meta+shift] 层，即可用 ⌘⇧C / ⌘⇧V 复制粘贴、⌘⇧T / ⌘⇧W 开关标签。
 set -e
 
-command -v kitty >/dev/null || { echo "未安装 kitty：sudo apt install kitty"; exit 1; }
+gsettings reset-recursively org.gnome.Ptyxis.Shortcuts
 
-REPO="$(cd "$(dirname "$0")/.." && pwd)"
-mkdir -p "$HOME/.config/kitty"
-cp "$REPO/config/kitty/kitty.conf" "$HOME/.config/kitty/kitty.conf"
-
-# 设为 xdg-terminal-exec 的默认终端（GNOME 的“打开终端”/Ctrl+Alt+T 会用它）
-printf 'kitty.desktop\n' > "$HOME/.config/xdg-terminals.list"
-
-echo "kitty 配置已安装：~/.config/kitty/kitty.conf"
-echo "默认终端：$(XDG_CURRENT_DESKTOP=ubuntu:GNOME xdg-terminal-exec --print-id 2>/dev/null || echo 'kitty.desktop')"
+echo "Ptyxis 快捷键已还原为原生默认（配合 keyd 的 ⌘⇧… 使用）："
+for k in copy-clipboard paste-clipboard new-tab close-tab search select-all; do
+  printf '  %-18s %s\n' "$k" "$(gsettings get org.gnome.Ptyxis.Shortcuts "$k")"
+done
