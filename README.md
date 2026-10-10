@@ -17,11 +17,14 @@ macOS 快捷键习惯在 Ubuntu 环境下的配置记录与自动化脚本。
 ### 2. 应用 macOS 风格快捷键
 
 ```bash
-./scripts/setup-system-shortcuts.sh   # 系统级：锁屏、注销、截图冲突、启动器、自动锁屏
-./scripts/setup-shortcuts.sh          # 窗口级：最小化、切换、全屏等
+sudo ./scripts/setup-keyd.sh           # 内核层：把 ⌘+X 翻译成 Ctrl+X（GUI 应用统一）
+./scripts/setup-terminal.sh            # 终端 kitty：⌘C 复制 / ⌘V 粘贴，并设为默认终端
+./scripts/setup-system-shortcuts.sh    # 系统级：锁屏、注销、截图冲突、启动器、自动锁屏
+./scripts/setup-shortcuts.sh           # 窗口级：最小化、切换、全屏等
 ```
 
 > 建议在执行前先备份，并逐项验证配置是否符合个人习惯。
+> 整体架构（为什么需要 keyd + kitty 两层）见 [macOS 手感最佳方案](docs/shortcuts/mac-authentic.md)。
 
 ## 目录结构
 
@@ -30,12 +33,18 @@ macOS 快捷键习惯在 Ubuntu 环境下的配置记录与自动化脚本。
 ├── README.md
 ├── CHANGELOG.md                # 仓库修订历史
 ├── .gitignore
+├── config/
+│   ├── keyd/default.conf           # keyd 映射（⌘ → Ctrl）
+│   └── kitty/kitty.conf            # 终端 kitty 的 macOS 键位
 ├── docs/
 │   └── shortcuts/
+│       ├── mac-authentic.md         # 整体架构与最佳方案（keyd + kitty + GNOME）
 │       ├── shortcuts-mapping.md     # 系统及应用快捷键映射方案
 │       ├── system-shortcuts.md      # 系统级快捷键实测梳理（锁屏/注销/截图/工作区…）
 │       └── keybindings-analysis.md  # 当前环境分析、风险点与建议
 ├── scripts/
+│   ├── setup-keyd.sh            # 安装 keyd 配置（需 sudo）
+│   ├── setup-terminal.sh        # 安装 kitty 键位并设为默认终端
 │   ├── setup-system-shortcuts.sh # 系统级快捷键配置（锁屏、截图冲突等）
 │   ├── setup-shortcuts.sh       # 应用 macOS 风格窗口快捷键
 │   ├── setup-flameshot.sh       # Flameshot 安装与绑定
@@ -47,6 +56,7 @@ macOS 快捷键习惯在 Ubuntu 环境下的配置记录与自动化脚本。
 
 ## 相关文档
 
+- [macOS 手感最佳方案（架构）](docs/shortcuts/mac-authentic.md)
 - [快捷键映射方案](docs/shortcuts/shortcuts-mapping.md)
 - [系统快捷键实测梳理](docs/shortcuts/system-shortcuts.md)
 - [环境分析与梳理](docs/shortcuts/keybindings-analysis.md)

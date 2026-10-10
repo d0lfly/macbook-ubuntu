@@ -3,6 +3,8 @@
 > 2026-10-06 实测生成：全部取自本机 `gsettings` / `dconf` 当前值，不是文档推断。
 > 环境：Ubuntu 26.04.1 LTS / GNOME Shell 50.1 / Wayland / MacBook
 > 修饰键约定：⌘Cmd = Super，⌥Option = Alt，⌃Control = Control
+>
+> **2026-10-10 重要补充**：本机另有一个内核层键盘重映射服务 **keyd**（`/etc/keyd/default.conf`），它把 `⌘+X` 全局翻译成 `Ctrl+X`。此前的梳理遗漏了它，导致下文「Ptyxis 已是 macOS 风格」的结论**不成立**（Ptyxis 的 Super 绑定被 keyd 抢走）。完整架构与修正见 [mac-authentic.md](mac-authentic.md)。
 
 ## 一、实测现状
 
@@ -69,7 +71,7 @@
 | 打开终端 | 无默认 | `media-keys/terminal` = ⌃⌥T | ✅ Ubuntu 惯例 |
 | Emoji | ⌃⌘Space | 自定义 `⌘.` → `~/.local/bin/emoji-picker` | ✅ |
 | 放大镜 | ⌃⌘± | ⌥⌘= / ⌥⌘- ；屏幕阅读器 ⌥⌘S | ✅ |
-| Ptyxis（终端） | ⌘T/⌘W/⌘C/⌘V/⌘F/⌘, | `Ptyxis/Shortcuts` 已全为 Super 系 | ✅ 已是 macOS 风格 |
+| 终端（kitty） | ⌘T/⌘W/⌘C/⌘V/⌘F | keyd 全局 ⌘→Ctrl + kitty 键位；⌘C 复制、⌘V 粘贴 | ✅ 见 `mac-authentic.md` |
 | 微信全局键 | ⌘⇧W / ⌘⇧A | `⌘⇧W` 显示/隐藏窗口、`⌘⇧A` 截图 | ✅ 与 macOS 微信一致 |
 
 ## 二、发现的问题

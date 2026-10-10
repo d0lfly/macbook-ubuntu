@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### macOS 手感整体方案（2026-10-10）
+- 新增 `docs/shortcuts/mac-authentic.md`：整体架构（keyd 内核层 `⌘→Ctrl` + kitty 终端 + GNOME 系统键）与取舍说明
+- 新增 `config/keyd/default.conf` + `scripts/setup-keyd.sh`：把此前游离在仓库外的 keyd 配置纳入管理，并补齐 `[meta+shift]` 的 `v/f/k/[/]`（此前 `⌘⇧V` 会回落成 `Ctrl+V`）
+- 新增 `config/kitty/kitty.conf` + `scripts/setup-terminal.sh`：终端换用 kitty，`⌘C` 复制 / `⌘V` 粘贴（`copy_or_interrupt`，无选区时仍可中断），并设为默认终端
+- 修正 `docs/shortcuts/system-shortcuts.md`：补记 keyd 的存在，更正「Ptyxis 已是 macOS 风格」的错误结论
+- 修正 `org.gnome.Ptyxis.Shortcuts`：还原为原生默认（`Ctrl+Shift+…`）—— 此前被改成 Super 系，但被 keyd 抢走、实际不可用
+- 更新 `README.md`：快速开始与目录结构加入 keyd / kitty
+
 ### Added
 - `docs/shortcuts/system-shortcuts.md`：系统级快捷键实测梳理（锁屏、注销、截图、概览、工作区、音量亮度、输入法），含冲突清单与待确认项
 - `scripts/setup-system-shortcuts.sh`：系统级快捷键配置脚本（锁屏、注销、启动器、截图冲突释放、自动锁屏）
