@@ -18,10 +18,10 @@ gsettings set org.gnome.desktop.wm.keybindings switch-applications-backward "['<
 gsettings set org.gnome.desktop.wm.keybindings switch-group "['<Super>grave', '<Alt>Above_Tab']"
 gsettings set org.gnome.desktop.wm.keybindings switch-group-backward "['<Shift><Super>grave', '<Shift><Alt>Above_Tab']"
 
-# Workspaces —— 已确认保持 A1（⌘⌥←/→、⌃⌥←/→、⌘PageUp/PageDown），见 docs/shortcuts/system-shortcuts.md 三·A
-# 不占用全局 ⌃←/→，以免吃掉终端/编辑器的词跳转。A2（与 macOS 完全一致）如需启用再放开：
-# gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left "['<Control>Left', '<Super><Alt>Left']"
-# gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-right "['<Control>Right', '<Super><Alt>Right']"
+# 工作区切换：⌘⌃←/→（macOS 是 ⌃←/→；加 ⌘ 是为了不全局占用应用的 Ctrl+←/→ 词跳转）
+# keyd 在 [control+meta] 里把 ⌘⌃←/→ 显式重发为 Super+Control+←/→
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left "['<Super><Control>Left', '<Super><Alt>Left', '<Control><Alt>Left', '<Super>Page_Up', '<Super>KP_Prior']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-right "['<Super><Control>Right', '<Super><Alt>Right', '<Control><Alt>Right', '<Super>Page_Down', '<Super>KP_Next']"
 
 # Show desktop: 保留 ⌃⌘D，按 macOS 习惯增加 ⌘F11
 gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Primary><Super>d', '<Primary><Alt>d', '<Super>F11']"

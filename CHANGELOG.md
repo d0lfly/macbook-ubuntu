@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### 用户确认项（2026-10-10 续）
+- 终端标签：确认 `⌘⇧T` / `⌘⇧W`（Ptyxis 原生 `Ctrl+Shift+T/W`，由 keyd `[meta+shift]` 触发）
+- 工作区切换：改为 `⌘⌃←/→`；keyd `[control+meta]` 新增 `left/right = M-C-left/right` 显式重发为 `Super+Control+←/→`（否则会回落到 `[meta]` 变成 `Ctrl+←`）
+- `scripts/setup-shortcuts.sh` 落地 `switch-to-workspace-*` 绑定；`docs/shortcuts/system-shortcuts.md`、`mac-authentic.md` 同步
+
 ### macOS 手感整体方案（2026-10-10）
 - 新增 `docs/shortcuts/mac-authentic.md`：整体架构（keyd 内核层 `⌘→Ctrl` + 系统默认终端 Ptyxis + GNOME 系统键）与取舍说明
 - 新增 `config/keyd/default.conf` + `scripts/setup-keyd.sh`：把此前游离在仓库外的 keyd 配置纳入管理，并补齐 `[meta+shift]` 的 `v/f/k/[/]`（此前 `⌘⇧V` 会回落成 `Ctrl+V`）
