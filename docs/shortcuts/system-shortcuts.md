@@ -4,7 +4,7 @@
 > 环境：Ubuntu 26.04.1 LTS / GNOME Shell 50.1 / Wayland / MacBook
 > 修饰键约定：⌘Cmd = Super，⌥Option = Alt，⌃Control = Control
 >
-> **2026-10-10 重要补充**：本机另有一个内核层键盘重映射服务 **keyd**（`/etc/keyd/default.conf`），它把 `⌘+X` 全局翻译成 `Ctrl+X`。此前的梳理遗漏了它，导致下文若干结论**不成立**：Ptyxis 的 Super 绑定被 keyd 抢走；`⌃⌘Q` 锁屏、`⇧⌘Q` 注销、`⌃⌘D` 显示桌面、`⇧⌘5` 截图、`⌘`` 切换窗口等系统键因复合层回落而失效。这些已在 keyd 里显式重发修复。完整架构与修正见 [mac-authentic.md](mac-authentic.md)。
+> **2026-10-10 重要补充**：本机另有一个内核层键盘重映射服务 **keyd**（`/etc/keyd/default.conf`），它把 `⌘+X` 全局翻译成 `Ctrl+X`，并把 **CapsLock 映射为 Control**（`[main] capslock = layer(control)`）。此前的梳理遗漏了它，导致下文若干结论**不成立**：Ptyxis 的 Super 绑定被 keyd 抢走；`⌃⌘Q` 锁屏、`⇧⌘Q` 注销、`⌃⌘D` 显示桌面、`⇧⌘5` 截图、`⌘`` 切换窗口等系统键因复合层回落而失效。这些已在 keyd 里显式重发修复。完整架构与修正见 [mac-authentic.md](mac-authentic.md)。
 
 ## 一、实测现状
 

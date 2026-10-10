@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### CapsLock 映射为 Control（2026-10-10 续）
+- keyd `[main]` 新增 `capslock = layer(control)`，CapsLock 等同于 Control
+- 用 `layer(control)`（而非直接赋 `leftcontrol`）：它会激活真正的 `control` 层，因此 `CapsLock+⌘+Q`（锁屏）等 `⌃⌘…` 复合层也能用
+
 ### 保留微信全局键（2026-10-10 续）
 - keyd `[meta+shift]` 的 `w` / `a` 改为显式重发（`M-S-w` / `M-S-a`），让 `⌘⇧W` / `⌘⇧A` 交还给 GNOME 的微信全局键（显示/隐藏窗口、截图）
 - 终端关标签随之由 `⌘⇧W` 改为 `⌘W`（Ptyxis close-tab = `Ctrl+W`，macOS 语义）；终端「全选」只剩物理 `Ctrl+Shift+A`

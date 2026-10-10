@@ -40,6 +40,7 @@
 
 配置见 `config/keyd/default.conf`，脚本 `scripts/setup-keyd.sh`。
 
+- `[main]`：`capslock = layer(control)` —— CapsLock 等同于 Control。因为它是真正的 `control` 层，所以 `CapsLock+⌘+Q`（锁屏）等 `⌃⌘…` 复合层也能用。
 - `[meta]`：`⌘+字母` → `Ctrl+字母`（GUI 应用）。
 - `[meta+shift]`：`⌘⇧+字母` → `Ctrl+Shift+字母`（终端函数，以及 GUI 的 `Ctrl+Shift` 系）。
 - `[meta+alt]` / `[control+meta]`：其他组合。
