@@ -20,6 +20,7 @@ macOS 快捷键习惯在 Ubuntu 环境下的配置记录与自动化脚本。
 sudo ./scripts/setup-keyd.sh           # 内核层：把 ⌘+X 翻译成 Ctrl+X（GUI 应用统一）
 ./scripts/setup-terminal.sh            # 终端：保持系统默认 Ptyxis，还原其原生键位（⌘⇧C/V 复制粘贴）
 ./scripts/setup-system-shortcuts.sh    # 系统级：锁屏、注销、截图冲突、启动器、自动锁屏
+./scripts/check-media-keys.sh          # 体检：媒体键/锁屏是否正常（--fix 自动修复）
 ./scripts/setup-shortcuts.sh           # 窗口级：最小化、切换、全屏等
 ```
 
@@ -45,6 +46,7 @@ sudo ./scripts/setup-keyd.sh           # 内核层：把 ⌘+X 翻译成 Ctrl+X�
 │   ├── setup-keyd.sh            # 安装 keyd 配置（需 sudo）
 │   ├── setup-terminal.sh        # 保持系统默认终端 Ptyxis 并还原其键位
 │   ├── setup-system-shortcuts.sh # 系统级快捷键配置（锁屏、截图冲突等）
+│   ├── check-media-keys.sh      # media-keys 体检：custom-keybindings 路径 + 服务存活
 │   ├── setup-shortcuts.sh       # 应用 macOS 风格窗口快捷键
 │   ├── setup-flameshot.sh       # Flameshot 安装与绑定
 │   ├── setup-launcher.sh        # ⌘Space 启动器

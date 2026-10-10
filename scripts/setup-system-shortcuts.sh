@@ -36,4 +36,9 @@ gsettings get org.gnome.settings-daemon.plugins.media-keys logout
 gsettings get org.gnome.settings-daemon.plugins.media-keys search
 gsettings get org.gnome.shell.keybindings screenshot
 gsettings get org.gnome.shell.keybindings show-screenshot-ui
+
+# 收尾体检：gsd-media-keys 挂了会让以上所有系统键一起失效
+# （2026-10-06~10-11 实际发生过，见 docs/shortcuts/system-shortcuts.md 第四节）
+"$(dirname "$0")/check-media-keys.sh" || true
+
 echo "完成。"
